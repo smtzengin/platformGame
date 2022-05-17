@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Zemin
+  - NoCollision
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Backgrounds
+    uniqueID: 2161903551
+    locked: 0
+  - name: Zemin
+    uniqueID: 2055227057
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Objeler
+    uniqueID: 2353223867
+    locked: 0
+  - name: Efektler
+    uniqueID: 4090682637
+    locked: 0
+  - name: Player
+    uniqueID: 604341437
+    locked: 0
