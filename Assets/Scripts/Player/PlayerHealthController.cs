@@ -15,12 +15,13 @@ public class PlayerHealthController : MonoBehaviour
     private void Start()
     {
         gecerliSaglilk = maxSaglik;
+        UIManager.instance.SliderGuncelle(gecerliSaglilk,maxSaglik);
     }
 
     public void CanAzaltFNC()
     {
         gecerliSaglilk--;
-
+        UIManager.instance.SliderGuncelle(gecerliSaglilk, maxSaglik);
         if (gecerliSaglilk <= 0)
         {
             gecerliSaglilk = 0;
