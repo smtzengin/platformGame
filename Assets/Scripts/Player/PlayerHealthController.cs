@@ -25,7 +25,9 @@ public class PlayerHealthController : MonoBehaviour
         if (gecerliSaglilk <= 0)
         {
             gecerliSaglilk = 0;
-            gameObject.SetActive(false);
+            // gameObject.SetActive(false);
+
+            PlayerController.instance.PlayerCanVerdi();
         }
     }
 }
