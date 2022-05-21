@@ -4,23 +4,35 @@ using UnityEngine;
 
 public class ToplamaManager : MonoBehaviour
 {
-    [SerializeField] 
-    bool coinMi;
+    [SerializeField] bool coinMi, iksirMi;
 
-    [SerializeField] GameObject coinEffect;
+    [SerializeField] GameObject patlamaEffect;
 
     bool toplandiMi;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !toplandiMi)
+        if (coinMi)
         {
-            toplandiMi = true;
-            GameManager.instance.toplananCoinAdet++;
-            UIManager.instance.CoinAdetGuncelle();
+            if (other.CompareTag("Player") && !toplandiMi)
+            {
+                toplandiMi = true;
+                GameManager.instance.toplananCoinAdet++;
+                UIManager.instance.CoinAdetGuncelle();
 
-            Destroy(this.gameObject);
-            Instantiate(coinEffect, transform.position, Quaternion.identity);
+                Destroy(this.gameObject);
+                Instantiate(patlamaEffect, transform.position, Quaternion.identity);
+            }
+        }
+        if (iksirMi)
+        {
+            if (other.CompareTag("Player") && !toplandiMi)
+            {
+                PlayerHealthController.instance.CaniArttir();
+
+                Destroy(this.gameObject);
+                Instantiate(patlamaEffect, transform.position, Quaternion.identity);
+            }
         }
     }
 }

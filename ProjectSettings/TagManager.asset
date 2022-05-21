@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - SwordAttackBox
+  - Orumcek
+  - Bat
   layers:
   - Default
   - TransparentFX
@@ -15,8 +17,8 @@ TagManager:
   - Zemin
   - NoCollision
   - PlayerLayer
-  - 
-  - 
+  - DusmanLayer
+  - SwordLayer
   - 
   - 
   - 

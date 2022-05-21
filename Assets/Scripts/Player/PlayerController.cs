@@ -23,8 +23,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float geriTepkiSuresi, geriTepkiGucu;
     float geriTepkiSayaci;
     bool yonSagdaMi;
-    bool playerCanVerdiMi;
+    public bool playerCanVerdiMi;
     bool swordAttack;
+    public float attackTimer;
+    public float attackCoolDown;
 
     private void Awake()
     {
@@ -32,6 +34,8 @@ public class PlayerController : MonoBehaviour
         swordAttack = false;
         instance = this;
         playerCanVerdiMi = false;
+        attackTimer = 0;
+        attackCoolDown = 0.5f;
         SwordHitBox.SetActive(false);
     }
 
@@ -39,7 +43,7 @@ public class PlayerController : MonoBehaviour
     {
         if (playerCanVerdiMi)
             return;
-
+        
         if (geriTepkiSayaci <= 0)
         {
             Move();
@@ -55,15 +59,33 @@ public class PlayerController : MonoBehaviour
                 swordSprite.color = new Color(swordSprite.color.r, swordSprite.color.g, swordSprite.color.b, 1f);
 
             }
+
+            if (attackTimer > 0)
+            {
+                attackTimer -= Time.deltaTime;
+            }
+            if(attackTimer < 0)
+            {
+                attackTimer = 0;
+            }
+
             if (Input.GetMouseButton(0) && SwordPlayer.activeSelf)
             {
-                swordAttack = true;
-                SwordHitBox.SetActive(true);
+                if(attackTimer == 0)
+                {
+                    swordAttack = true;
+                    SwordHitBox.SetActive(true);
+                    attackTimer = attackCoolDown;
+                }
+
             }
             else
             {
                 swordAttack = false;
             }
+
+
+
         }
         
         else
@@ -185,4 +207,5 @@ public class PlayerController : MonoBehaviour
         SwordPlayer.SetActive(true);
     }
 
+   
 }

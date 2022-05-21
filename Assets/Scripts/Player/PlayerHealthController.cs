@@ -30,4 +30,15 @@ public class PlayerHealthController : MonoBehaviour
             PlayerController.instance.PlayerCanVerdi();
         }
     }
+
+    public void CaniArttir()
+    {
+        gecerliSaglilk+= 3;
+        if(gecerliSaglilk >= maxSaglik)
+        {
+            gecerliSaglilk = maxSaglik;
+        }
+
+        UIManager.instance.SliderGuncelle(gecerliSaglilk, maxSaglik);
+    }
 }
