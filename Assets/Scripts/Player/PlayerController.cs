@@ -7,13 +7,15 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
     [SerializeField] Transform zeminKontrol;
-    [SerializeField] Animator normalAnim,swordAnim;
-    [SerializeField] SpriteRenderer normalSprite, swordSprite;
+    [SerializeField] Animator normalAnim,swordAnim,spearAnim;
+    [SerializeField] SpriteRenderer normalSprite, swordSprite,spearSprite;
     [SerializeField] GameObject SwordHitBox;
     public LayerMask zeminMask;
 
     Rigidbody2D rb2D;
-    [SerializeField] GameObject normalPlayer, SwordPlayer;
+    [SerializeField] GameObject normalPlayer, SwordPlayer,spearPlayer;
+    [SerializeField] GameObject atilacakSpear;
+    [SerializeField] Transform spearCikisNoktasi;
 
     public float moveSpeed;
     public float jumpPower;
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
     bool yonSagdaMi;
     public bool playerCanVerdiMi;
     bool swordAttack;
+    bool spearAttack;
     public float attackTimer;
     public float attackCoolDown;
 
@@ -50,15 +53,9 @@ public class PlayerController : MonoBehaviour
             Jump();
             Flip();
 
-            if (normalPlayer.activeSelf)
-            {
-                normalSprite.color = new Color(normalSprite.color.r, normalSprite.color.g, normalSprite.color.b, 1f);
-            }
-            if (SwordPlayer.activeSelf)
-            {
-                swordSprite.color = new Color(swordSprite.color.r, swordSprite.color.g, swordSprite.color.b, 1f);
-
-            }
+            GeriTepkiDuzeltmeBirF(normalPlayer, normalSprite);
+            GeriTepkiDuzeltmeBirF(SwordPlayer, swordSprite);
+            GeriTepkiDuzeltmeBirF(spearPlayer, spearSprite);
 
             if (attackTimer > 0)
             {
@@ -84,6 +81,11 @@ public class PlayerController : MonoBehaviour
                 swordAttack = false;
             }
 
+            if (Input.GetKeyDown(KeyCode.X) && spearPlayer.activeSelf)
+            {
+                spearAnim.SetTrigger("mizrakAtti");
+                Invoke("MizragiFirlat",0.15f);
+            }
 
 
         }
@@ -110,13 +112,21 @@ public class PlayerController : MonoBehaviour
         if (SwordPlayer.activeSelf)
         {
             swordAnim.SetBool("zemindeMi", zemindeMi);
-            swordAnim.SetFloat("hareketHizi", Mathf.Abs(rb2D.velocity.x));   
-            
+            swordAnim.SetFloat("hareketHizi", Mathf.Abs(rb2D.velocity.x));            
+        }
+        if (spearPlayer.activeSelf)
+        {
+            spearAnim.SetBool("zemindeMi", zemindeMi);
+            spearAnim.SetFloat("hareketHizi", Mathf.Abs(rb2D.velocity.x));
         }
 
         if (swordAttack && SwordPlayer.activeSelf)
         {
             swordAnim.SetTrigger("SwordAttack");
+        }
+        if (spearAttack && spearPlayer.activeSelf)
+        {
+            spearAnim.SetTrigger("atakYapti");
         }
 
     }
@@ -159,17 +169,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void MizragiFirlat()
+    {
+        GameObject spear = Instantiate(atilacakSpear, spearCikisNoktasi.position, spearCikisNoktasi.rotation);
+        spear.transform.localScale = transform.localScale;
+        spear.GetComponent<Rigidbody2D>().velocity = spearCikisNoktasi.right * transform.localScale.x * 8f;
+        Invoke("CloseAllOpenNormal", 0.15f);
+        Destroy(spear,3f);
+    }
+
     public void GeriTepki()
     {
         geriTepkiSayaci = geriTepkiSuresi;
-        if (normalPlayer.activeSelf)
-        {
-            normalSprite.color = new Color(normalSprite.color.r, normalSprite.color.g, normalSprite.color.b, 0.8f);
-        }
-        if (SwordPlayer.activeSelf)
-        {
-            swordSprite.color = new Color(swordSprite.color.r, swordSprite.color.g, swordSprite.color.b, 0.8f);
-        }
+        
+        GeriTepkiDuzeltme(normalPlayer,normalSprite);
+        GeriTepkiDuzeltme(SwordPlayer, swordSprite);
+        GeriTepkiDuzeltme(spearPlayer,spearSprite);
 
         rb2D.velocity = new Vector2(0, rb2D.velocity.y);
         
@@ -185,6 +200,10 @@ public class PlayerController : MonoBehaviour
         if (SwordPlayer.activeSelf)
         {
             swordAnim.SetTrigger("canVerdi");
+        }
+        if (spearPlayer.activeSelf)
+        {
+            spearAnim.SetTrigger("canVerdi");
         }
 
         StartCoroutine(PlayerYokEtSahneYenile());
@@ -204,8 +223,38 @@ public class PlayerController : MonoBehaviour
     public void NormalToSword()
     {
         normalPlayer.SetActive(false);
+        spearPlayer.SetActive(false);
         SwordPlayer.SetActive(true);
     }
 
    
+    public void GeriTepkiDuzeltme(GameObject player,SpriteRenderer sprite)
+    {
+        if (player.activeSelf)
+        {
+            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 0.6f);
+        }
+    }
+    public void GeriTepkiDuzeltmeBirF(GameObject player, SpriteRenderer sprite)
+    {
+        if (player.activeSelf)
+        {
+            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 1f);
+        }
+    }
+
+    public void CloseAllOpenSpear()
+    {
+        normalPlayer.SetActive(false);
+        SwordPlayer.SetActive(false);
+        spearPlayer.SetActive(true);
+    }
+
+    public void CloseAllOpenNormal()
+    {
+        normalPlayer.SetActive(true);
+        SwordPlayer.SetActive(false);
+        spearPlayer.SetActive(false);
+
+    }
 }
