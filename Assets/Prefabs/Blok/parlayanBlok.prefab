@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5579117095869230813}
   - component: {fileID: 5579117095869230812}
   - component: {fileID: 5579117095869230800}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: parlayanBlok
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5579117095984918493}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: altPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

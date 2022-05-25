@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/girisSahnesi.unity
+    guid: 31428022d8895674c80af67d0b28e035
+  - enabled: 1
     path: Assets/Scenes/testSahne.unity
     guid: bad33a6d828a8c04cb935cf4bfd84b68
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: a633953599d0c6141b573585e1a8e842
   m_configObjects: {}

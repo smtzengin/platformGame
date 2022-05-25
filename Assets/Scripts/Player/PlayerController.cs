@@ -257,4 +257,23 @@ public class PlayerController : MonoBehaviour
         spearPlayer.SetActive(false);
 
     }
+
+    public void PlayeriHareketsizYap()
+    {
+        if (normalPlayer.activeSelf)
+        {
+            rb2D.velocity = Vector2.zero;
+            normalAnim.SetFloat("hareketHizi", 0);
+        }
+        if (SwordPlayer.activeSelf)
+        {
+            rb2D.velocity = Vector2.zero;
+            swordAnim.SetFloat("hareketHizi", 0);
+        }
+        if (spearPlayer.activeSelf)
+        {
+            rb2D.velocity = Vector2.zero;
+            spearAnim.SetFloat("hareketHizi", 0);
+        }
+    }
 }
