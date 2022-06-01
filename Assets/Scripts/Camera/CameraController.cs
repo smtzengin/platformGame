@@ -33,7 +33,12 @@ public class CameraController : MonoBehaviour
                 Mathf.Clamp(player.transform.position.y, boundsBox.bounds.min.y + halfYukseklik, boundsBox.bounds.max.y - halfYukseklik), 
                 transform.position.z);
         }
-        bgHareket();
+
+        if(backgrounds != null)
+        {
+            bgHareket();
+        }
+        
     }
 
     void bgHareket()

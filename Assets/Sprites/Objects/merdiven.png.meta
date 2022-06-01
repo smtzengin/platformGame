@@ -24,6 +24,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -84,18 +85,40 @@ TextureImporter:
       - {x: -49, y: -162}
       - {x: 49, y: -162}
       - {x: 49, y: 162}
-    - - {x: -41, y: 160}
-      - {x: 40, y: 160}
-      - {x: 41, y: -158}
-      - {x: -42, y: -156}
+    - - {x: -37, y: -108}
+      - {x: 35, y: -110}
+      - {x: 33, y: -155}
+      - {x: -37, y: -154}
+    - - {x: -38, y: -60}
+      - {x: 33, y: -60}
+      - {x: 34, y: -103}
+      - {x: -37, y: -102}
+    - - {x: -37, y: -9}
+      - {x: -16, y: -8}
+      - {x: 36, y: -8}
+      - {x: 35, y: -53}
+      - {x: -39, y: -52}
+    - - {x: -38, y: 39}
+      - {x: 36, y: 39}
+      - {x: 36, y: 3}
+      - {x: -38, y: 2}
+    - - {x: -38, y: 93}
+      - {x: 36, y: 92}
+      - {x: 36, y: 46}
+      - {x: -38, y: 45}
+    - - {x: -38, y: 158}
+      - {x: 36, y: 158}
+      - {x: 36, y: 103}
+      - {x: -38, y: 103}
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

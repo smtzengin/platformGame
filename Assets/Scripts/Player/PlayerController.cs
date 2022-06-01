@@ -7,15 +7,17 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
     [SerializeField] Transform zeminKontrol;
-    [SerializeField] Animator normalAnim,swordAnim,spearAnim;
-    [SerializeField] SpriteRenderer normalSprite, swordSprite,spearSprite;
+    [SerializeField] Animator normalAnim,swordAnim,spearAnim,bowAnim;
+    [SerializeField] SpriteRenderer normalSprite, swordSprite,spearSprite,bowSprite;
     [SerializeField] GameObject SwordHitBox;
     public LayerMask zeminMask;
 
     Rigidbody2D rb2D;
-    [SerializeField] GameObject normalPlayer, SwordPlayer,spearPlayer;
+    [SerializeField] GameObject normalPlayer, SwordPlayer,spearPlayer,bowPlayer;
     [SerializeField] GameObject atilacakSpear;
     [SerializeField] Transform spearCikisNoktasi;
+    [SerializeField] GameObject atilacakOk;
+    [SerializeField] Transform okCikisNoktasi;
 
     public float moveSpeed;
     public float jumpPower;
@@ -23,11 +25,15 @@ public class PlayerController : MonoBehaviour
     bool doubleJumpOlsunMu;
 
     [SerializeField] float geriTepkiSuresi, geriTepkiGucu;
+    [SerializeField] float tirmanisHizi = 3f;
+    [SerializeField] GameObject normalKamera, kilicKamera, okKamera, mizrakKamera;
     float geriTepkiSayaci;
     bool yonSagdaMi;
     public bool playerCanVerdiMi;
     bool swordAttack;
     bool spearAttack;
+    bool bowAttack;
+    bool okAtabilirMi;
     public float attackTimer;
     public float attackCoolDown;
 
@@ -35,6 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
         swordAttack = false;
+        okAtabilirMi = true;
         instance = this;
         playerCanVerdiMi = false;
         attackTimer = 0;
@@ -56,6 +63,7 @@ public class PlayerController : MonoBehaviour
             GeriTepkiDuzeltmeBirF(normalPlayer, normalSprite);
             GeriTepkiDuzeltmeBirF(SwordPlayer, swordSprite);
             GeriTepkiDuzeltmeBirF(spearPlayer, spearSprite);
+            GeriTepkiDuzeltmeBirF(bowPlayer, bowSprite);
 
             if (attackTimer > 0)
             {
@@ -86,7 +94,30 @@ public class PlayerController : MonoBehaviour
                 spearAnim.SetTrigger("mizrakAtti");
                 Invoke("MizragiFirlat",0.15f);
             }
+            if (Input.GetKeyDown(KeyCode.X) && bowPlayer.activeSelf && okAtabilirMi)
+            {
+                bowAnim.SetTrigger("okAtti");
+                StartCoroutine(DelayArrow());     
+            }
+            if (bowPlayer.activeSelf)
+            {
+                if (GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("TirmanmaLayer")))
+                {
+                    float h = Input.GetAxis("Vertical");
 
+                    Vector2 tirmanisVector = new Vector2(rb2D.velocity.x, h * tirmanisHizi);
+                    rb2D.velocity = tirmanisVector;
+                    rb2D.gravityScale = 0f;
+                    bowAnim.SetBool("tirmansinMi", true);
+                    bowAnim.SetFloat("yukariHareketHizi", Mathf.Abs(rb2D.velocity.y));
+                }
+                else
+                {
+                    bowAnim.SetBool("tirmansinMi", false);
+                    rb2D.gravityScale = 5f;
+                }
+            }
+            
 
         }
         
@@ -119,6 +150,11 @@ public class PlayerController : MonoBehaviour
             spearAnim.SetBool("zemindeMi", zemindeMi);
             spearAnim.SetFloat("hareketHizi", Mathf.Abs(rb2D.velocity.x));
         }
+        if (bowPlayer.activeSelf)
+        {
+            bowAnim.SetBool("zemindeMi", zemindeMi);
+            bowAnim.SetFloat("hareketHizi", Mathf.Abs(rb2D.velocity.x));
+        }
 
         if (swordAttack && SwordPlayer.activeSelf)
         {
@@ -127,6 +163,10 @@ public class PlayerController : MonoBehaviour
         if (spearAttack && spearPlayer.activeSelf)
         {
             spearAnim.SetTrigger("atakYapti");
+        }
+        if (bowAttack && bowPlayer.activeSelf)
+        {
+            bowAnim.SetTrigger("okAtti");
         }
 
     }
@@ -178,6 +218,15 @@ public class PlayerController : MonoBehaviour
         Destroy(spear,3f);
     }
 
+    IEnumerator DelayArrow()
+    {
+        okAtabilirMi = false;
+        yield return new WaitForSeconds(0.5f);
+        ArrowPoolManager.instance.ArrowFirlat(okCikisNoktasi, this.transform);
+        okAtabilirMi = true;
+    }
+    
+
     public void GeriTepki()
     {
         geriTepkiSayaci = geriTepkiSuresi;
@@ -185,6 +234,7 @@ public class PlayerController : MonoBehaviour
         GeriTepkiDuzeltme(normalPlayer,normalSprite);
         GeriTepkiDuzeltme(SwordPlayer, swordSprite);
         GeriTepkiDuzeltme(spearPlayer,spearSprite);
+        GeriTepkiDuzeltme(bowPlayer, bowSprite);
 
         rb2D.velocity = new Vector2(0, rb2D.velocity.y);
         
@@ -205,6 +255,10 @@ public class PlayerController : MonoBehaviour
         {
             spearAnim.SetTrigger("canVerdi");
         }
+        if (bowPlayer.activeSelf)
+        {
+            bowAnim.SetTrigger("canVerdi");
+        }
 
         StartCoroutine(PlayerYokEtSahneYenile());
     }
@@ -220,12 +274,7 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void NormalToSword()
-    {
-        normalPlayer.SetActive(false);
-        spearPlayer.SetActive(false);
-        SwordPlayer.SetActive(true);
-    }
+   
 
    
     public void GeriTepkiDuzeltme(GameObject player,SpriteRenderer sprite)
@@ -242,20 +291,57 @@ public class PlayerController : MonoBehaviour
             sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 1f);
         }
     }
+    public void NormalToSword()
+    {
+        TumKameralariKapat();
+        kilicKamera.SetActive(true);
+
+        normalPlayer.SetActive(false);
+        spearPlayer.SetActive(false);
+        SwordPlayer.SetActive(true);
+        bowPlayer.SetActive(false);
+    }
 
     public void CloseAllOpenSpear()
     {
+        TumKameralariKapat();
+        mizrakKamera.SetActive(true);
+
         normalPlayer.SetActive(false);
         SwordPlayer.SetActive(false);
         spearPlayer.SetActive(true);
+        bowPlayer.SetActive(false);
     }
 
     public void CloseAllOpenNormal()
     {
+        TumKameralariKapat();
+        normalKamera.SetActive(true);
+
         normalPlayer.SetActive(true);
         SwordPlayer.SetActive(false);
         spearPlayer.SetActive(false);
+        bowPlayer.SetActive(false);
+    }
 
+    public void CloseAllOpenBow()
+    {
+        TumKameralariKapat();
+        okKamera.SetActive(true);
+
+        normalPlayer.SetActive(false);
+        SwordPlayer.SetActive(false);
+        spearPlayer.SetActive(false);
+        bowPlayer.SetActive(true);
+
+    }
+
+    void TumKameralariKapat()
+    {
+        normalKamera.SetActive(false);
+        kilicKamera.SetActive(false);
+        okKamera.SetActive(false);
+        mizrakKamera.SetActive(false);
     }
 
     public void PlayeriHareketsizYap()
@@ -274,6 +360,11 @@ public class PlayerController : MonoBehaviour
         {
             rb2D.velocity = Vector2.zero;
             spearAnim.SetFloat("hareketHizi", 0);
+        }
+        if (bowPlayer.activeSelf)
+        {
+            rb2D.velocity = Vector2.zero;
+            bowAnim.SetFloat("hareketHizi", 0);
         }
     }
 }
