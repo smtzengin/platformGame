@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] Transform butonlarPanel;
 
+    [SerializeField] GameObject pausePanel;
     private void Start()
     {
         TumButonlarinAlphasiniDusur();
@@ -43,7 +45,9 @@ public class UIManager : MonoBehaviour
         foreach (Transform btn in butonlarPanel)
         {
             btn.gameObject.GetComponent<CanvasGroup>().alpha = 0.25f;
+            btn.GetComponent<Button>().interactable = true;
         }
+
     }
 
     public void NormalButonaBasildi()
@@ -53,6 +57,7 @@ public class UIManager : MonoBehaviour
         UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.transform.gameObject.GetComponent<CanvasGroup>().alpha = 1f;
 
         PlayerController.instance.CloseAllOpenNormal();
+        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
     }
     public void KilicButonaBasildi()
     {
@@ -61,6 +66,7 @@ public class UIManager : MonoBehaviour
         UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.transform.gameObject.GetComponent<CanvasGroup>().alpha = 1f;
 
         PlayerController.instance.NormalToSword();
+        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
     }
     public void OkButonaBasildi()
     {
@@ -69,6 +75,7 @@ public class UIManager : MonoBehaviour
         UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.transform.gameObject.GetComponent<CanvasGroup>().alpha = 1f;
 
         PlayerController.instance.CloseAllOpenBow();
+        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
     }
     public void MizrakButonaBasildi()
     {
@@ -77,5 +84,25 @@ public class UIManager : MonoBehaviour
         UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.transform.gameObject.GetComponent<CanvasGroup>().alpha = 1f;
 
         PlayerController.instance.CloseAllOpenSpear();
+        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().interactable = false;
+    }
+
+    public void PausePanelAcKapat()
+    {
+        if (!pausePanel.activeInHierarchy)
+        {
+            pausePanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            pausePanel.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    public void AnaMenuyeDon()
+    {
+        SceneManager.LoadScene("girisSahnesi");
     }
 }
