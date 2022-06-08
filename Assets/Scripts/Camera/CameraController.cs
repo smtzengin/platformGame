@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     PlayerController player;
-    [SerializeField] Collider2D boundsBox;
+    Collider2D boundsBox;
     float halfYukseklik,halfGenislik;
 
     Vector2 sonPos;
